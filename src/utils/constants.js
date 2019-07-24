@@ -1,5 +1,5 @@
 const constants = {}
-constants.organization = 'poanetwork'
+constants.organization = 'iExecBlockchainComputing'
 constants.repoName = 'poa-chain-spec'
 constants.addressesSourceFile = 'contracts.json'
 constants.ABIsSources = {
@@ -14,7 +14,8 @@ constants.branches = {
   DAI: 'dai',
   CORE: 'core',
   SOKOL: 'sokol',
-  KOVAN: 'kovan'
+  KOVAN: 'kovan',
+  VIVIANI: 'viviani'
 }
 
 constants.navigationData = [
@@ -59,6 +60,12 @@ constants.NETWORKS = {
     RPC: 'https://dai.poa.network',
     BRANCH: constants.branches.DAI,
     TESTNET: false
+  },
+  '133': {
+    NAME: 'vRLC',
+    RPC: 'https://viviani.iex.ec',
+    BRANCH: constants.branches.VIVIANI,
+    TESTNET: true
   }
 }
 
