@@ -80,19 +80,18 @@ export default class Metadata {
   }
 
   getMocData() {
-    // Barinov, Igor		755 Bounty Dr 202	Foster City	CA	94404 	41	2206724	07/23/2021
     return {
-      firstName: 'Igor',
-      lastName: 'Barinov',
-      fullAddress: '755 Bounty Dr 202, Foster City',
-      createdDate: '2017-12-18',
+      firstName: 'iExecMoc',
+      lastName: 'iExecMoc',
+      fullAddress: '',
+      createdDate: '2019-09-27',
       updatedDate: '',
-      expirationDate: '2021-07-23',
-      licenseId: '2206724',
-      us_state: 'CA',
-      postal_code: '94404',
+      expirationDate: '2099-09-27',
+      licenseId: '1',
+      us_state: '',
+      postal_code: '',
       contactEmail: '',
-      isCompany: false
+      isCompany: true
     }
   }
 

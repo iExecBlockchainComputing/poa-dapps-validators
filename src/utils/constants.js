@@ -15,7 +15,8 @@ constants.branches = {
   CORE: 'core',
   SOKOL: 'sokol',
   KOVAN: 'kovan',
-  VIVIANI: 'viviani'
+  VIVIANI: 'viviani',
+  BELLECOUR: 'bellecour'
 }
 
 constants.navigationData = [
@@ -66,6 +67,12 @@ constants.NETWORKS = {
     RPC: 'https://viviani.iex.ec',
     BRANCH: constants.branches.VIVIANI,
     TESTNET: true
+  },
+  '134': {
+    NAME: 'xRLC',
+    RPC: 'https://bellecour.iex.ec',
+    BRANCH: constants.branches.BELLECOUR,
+    TESTNET: false
   }
 }
 
