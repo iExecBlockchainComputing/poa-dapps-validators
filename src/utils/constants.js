@@ -16,7 +16,8 @@ constants.branches = {
   SOKOL: 'sokol',
   KOVAN: 'kovan',
   VIVIANI: 'viviani',
-  BELLECOUR: 'bellecour'
+  BELLECOUR: 'bellecour',
+  SANDBOX: 'sandbox'
 }
 
 constants.navigationData = [
@@ -73,6 +74,12 @@ constants.NETWORKS = {
     RPC: 'https://bellecour.iex.ec',
     BRANCH: constants.branches.BELLECOUR,
     TESTNET: false
+  },
+  '138': {
+    NAME: 'test',
+    RPC: 'https://sandbox.iex.ec',
+    BRANCH: constants.branches.SANDBOX,
+    TESTNET: true
   }
 }
 
