@@ -3,7 +3,7 @@ import PoaConsensus from './PoaConsensus.contract'
 import moment from 'moment'
 import helpers from './helpers'
 import helpersGlobal from '../utils/helpers'
-import { messages } from '../utils/messages'
+import messages from '../utils/messages'
 import { constants } from '../utils/constants'
 
 var toAscii = function(hex) {
@@ -97,7 +97,6 @@ export default class Metadata {
 
   async getValidatorData(miningKey) {
     if (!miningKey) {
-      helpersGlobal.generateAlert('warning', 'Warning!', messages.invalidaVotingKey)
       return {}
     }
 
@@ -153,7 +152,6 @@ export default class Metadata {
 
   async getPendingChange(miningKey) {
     if (!miningKey) {
-      helpersGlobal.generateAlert('warning', 'Warning!', messages.invalidaVotingKey)
       return {}
     }
 

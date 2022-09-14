@@ -1,13 +1,25 @@
+import { getNetworkFullName } from './utils'
+
 let messages = {}
 messages.wrongRepo = function(repo) {
   return `There is no such file in configured repo ${repo}`
 }
 messages.invalidaVotingKey =
-  'The key is not a valid voting Key or you are connected to the wrong chain! Please make sure you have loaded the correct voting key in Metamask / Nifty Wallet.'
-messages.noMetamaskAccount = `Your MetaMask is locked.
-Please choose your voting key in MetaMask and reload the page.
-Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.`
+  'The current key is not a valid Voting Key! Please make sure you have loaded the correct Voting Key in MetaMask / Nifty Wallet.'
+messages.noMetamaskAccount = 'Your MetaMask / Nifty Wallet is locked.'
+messages.noMetamaskFound =
+  'MetaMask / Nifty Wallet is not found. Please, install/activate it to be able to make transactions.'
+messages.userDeniedAccessToAccount = 'You have denied access to your accounts'
 
-module.exports = {
-  messages
+messages.networkMatchError = function(netId) {
+  const networkName = getNetworkFullName(Number(netId))
+  return `Networks in DApp and MetaMask (Nifty Wallet) do not match. Switch MetaMask / Nifty Wallet to <b>${networkName}</b> or change the network in DApp.`
 }
+
+messages.poaGnoMerging =
+  'POA is joining the Gnosis Chain ecosystem, and token holders can now swap POA for STAKE and then STAKE for GNO on the Gnosis Chain! More info and instructions <a href="https://www.poa.network/" target="_blank">here</a>.'
+
+messages.poaGnoMerged =
+  'POA Network merged with the Gnosis Chain.<br /><a href="https://www.poa.network/" target="_blank">More information</a> about the merger.'
+
+export default messages
