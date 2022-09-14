@@ -1,96 +1,143 @@
 import Web3 from 'web3'
 import helpers from './helpers'
 import { constants } from './constants'
+import messages from './messages'
 
-let getWeb3 = () => {
-  return new Promise(function(resolve, reject) {
-    // Wait for loading completion to avoid race conditions with web3 injection timing.
-    window.addEventListener('load', async function() {
-      let web3 = null
+const defaultNetId = helpers.netIdByBranch(constants.branches.CORE)
 
-      // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-      if (window.ethereum) {
-        web3 = new Web3(window.ethereum)
-        console.log('Injected web3 detected.')
-        try {
-          await window.ethereum.enable()
-        } catch (e) {
-          reject({ message: 'You have denied access to your accounts' })
-          return
-        }
-      } else if (window.web3) {
-        web3 = new Web3(window.web3.currentProvider)
-        console.log('Injected web3 detected.')
-      }
+async function getAccounts(web3) {
+  let accounts
+  if (window.ethereum) {
+    accounts = await window.ethereum.request({ method: 'eth_accounts' })
+  } else {
+    accounts = await web3.eth.getAccounts()
+  }
+  return accounts
+}
 
-      let errorMsg = null
-      let netIdName
-      let netId
-      let injectedWeb3 = web3 !== null
-      let defaultAccount = null
+async function getNetId(web3) {
+  let netId
+  if (window.ethereum) {
+    const { chainId } = window.ethereum
+    netId = web3.utils.isHex(chainId) ? web3.utils.hexToNumber(chainId) : chainId
+  } else {
+    netId = await web3.eth.net.getId()
+  }
+  return netId
+}
 
-      if (web3) {
-        netId = await web3.eth.net.getId()
-        console.log('netId', netId)
+export async function enableWallet(onAccountChange) {
+  if (window.ethereum) {
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' })
+    } catch (e) {
+      await onAccountChange(null)
+      throw Error(messages.userDeniedAccessToAccount)
+    }
 
-        if (!(netId in constants.NETWORKS)) {
-          netIdName = 'ERROR'
-          errorMsg = `You aren't connected to POA Network.
-              Please, switch to POA Network and refresh the page.
-              Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>Wiki</a> for more info.`
-          console.log('This is an unknown network.')
-        } else {
-          netIdName = constants.NETWORKS[netId].NAME
-          console.log(`This is ${netIdName}`)
-        }
+    const web3 = new Web3(window.ethereum)
+    const accounts = await getAccounts(web3)
 
-        const accounts = await web3.eth.getAccounts()
+    await onAccountChange(accounts[0])
+  }
+}
 
-        defaultAccount = accounts[0] || null
-      } else {
-        // Fallback to localhost if no web3 injection.
-        console.log('No web3 instance injected, using Local web3.')
-        console.error('Metamask not found')
+export default async function getWeb3(netId, onAccountChange) {
+  let web3 = null
 
-        if (window.location.host.indexOf(constants.branches.SOKOL) !== -1) {
-          netId = helpers.netIdByName(constants.branches.SOKOL)
-        } else if (window.location.host.indexOf(constants.branches.KOVAN) !== -1) {
-          netId = helpers.netIdByName(constants.branches.KOVAN)
-        } else if (window.location.host.indexOf(constants.branches.DAI) !== -1) {
-          netId = helpers.netIdByName(constants.branches.DAI)
-        } else {
-          netId = helpers.netIdByName(constants.branches.CORE)
-        }
-
-        const network = constants.NETWORKS[netId]
-
-        web3 = new Web3(new Web3.providers.HttpProvider(network.RPC))
-        netIdName = network.NAME
-      }
-
-      document.title = `${netIdName} - POA Validators DApp`
-
-      if (errorMsg !== null) {
-        reject({ message: errorMsg })
-        return
-      }
-
-      resolve({
-        web3Instance: web3,
-        netId,
-        netIdName,
-        injectedWeb3,
-        defaultAccount
+  // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+  if (window.ethereum) {
+    web3 = new Web3(window.ethereum)
+    console.log('Injected web3 detected.')
+    if (!window.ethereum.autoRefreshOnNetworkChange) {
+      window.ethereum.on('chainChanged', () => {
+        window.location.reload()
       })
-    })
-  })
+    }
+  } else if (window.web3) {
+    web3 = new Web3(window.web3.currentProvider)
+    console.log('Injected web3 detected.')
+  }
+
+  if (!netId) {
+    // Load for the first time in the current browser's session
+    if (web3) {
+      // MetaMask (or another plugin) is injected
+      netId = await getNetId(web3)
+      if (!(netId in constants.NETWORKS)) {
+        // If plugin's netId is unsupported, try to use
+        // the previously chosen netId
+        netId = window.localStorage.netId
+      }
+    } else {
+      // MetaMask (or another plugin) is not injected,
+      // so try to use the previously chosen netId
+      netId = window.localStorage.netId
+    }
+    if (!(netId in constants.NETWORKS)) {
+      // If plugin's netId and/or previously chosen netId are not supported,
+      // fallback to default netId
+      netId = defaultNetId
+    }
+    window.localStorage.netId = netId
+    window.sessionStorage.netId = netId
+  }
+
+  netId = Number(netId)
+
+  const network = constants.NETWORKS[netId]
+  let netIdName = network.NAME
+  let injectedWeb3 = web3 !== null
+  let defaultAccount = null
+  let networkMatch = false
+
+  if (web3) {
+    const accounts = await getAccounts(web3)
+    defaultAccount = accounts[0] || null
+
+    if (!defaultAccount) {
+      console.log('Unlock your wallet')
+    }
+
+    let currentAccount = defaultAccount ? defaultAccount.toLowerCase() : null
+    async function onUpdateAccount(account) {
+      if (account && account !== currentAccount) {
+        currentAccount = account
+        await onAccountChange(account)
+      }
+    }
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', async accs => {
+        const account = accs && accs.length > 0 ? accs[0].toLowerCase() : null
+        await onUpdateAccount(account)
+      })
+    } else if (web3.currentProvider.publicConfigStore) {
+      web3.currentProvider.publicConfigStore.on('update', async obj => {
+        const account = obj.selectedAddress ? obj.selectedAddress.toLowerCase() : null
+        await onUpdateAccount(account)
+      })
+    }
+
+    const web3NetId = await getNetId(web3)
+    if (web3NetId === netId) {
+      networkMatch = true
+    } else {
+      web3 = null
+    }
+  }
+
+  if (!web3) {
+    web3 = new Web3(new Web3.providers.HttpProvider(network.RPC))
+  }
+
+  document.title = `${netIdName} - POA Validators DApp`
+
+  return {
+    web3Instance: web3,
+    netId,
+    netIdName,
+    injectedWeb3,
+    defaultAccount,
+    networkMatch
+  }
 }
-
-const setWeb3 = netId => {
-  const provider = new Web3.providers.HttpProvider(constants.NETWORKS[netId].RPC)
-  return new Web3(provider)
-}
-
-export default getWeb3
-
-export { setWeb3 }
