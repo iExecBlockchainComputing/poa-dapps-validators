@@ -37,27 +37,6 @@ constants.navigationData = [
 ]
 
 constants.NETWORKS = {
-  '42': {
-    NAME: 'Kovan',
-    FULLNAME: 'Kovan Testnet',
-    RPC: 'https://kovan.infura.io/v3/1125fe73d87c4e5396678f4e3089b3dd',
-    BRANCH: constants.branches.KOVAN,
-    SORTORDER: 3
-  },
-  '77': {
-    NAME: 'Sokol',
-    FULLNAME: 'Sokol Testnet',
-    RPC: 'https://sokol.poa.network',
-    BRANCH: constants.branches.SOKOL,
-    SORTORDER: 4
-  },
-  '99': {
-    NAME: 'Core',
-    FULLNAME: 'POA Core',
-    RPC: 'https://core.poa.network',
-    BRANCH: constants.branches.CORE,
-    SORTORDER: 5
-  },
   '133': {
     NAME: 'vRLC',
     FULLNAME: 'Viviani Testnet',
