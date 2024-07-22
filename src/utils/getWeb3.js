@@ -26,6 +26,16 @@ async function getNetId(web3) {
   return netId
 }
 
+export const netIdByName = (netName) => {
+  const netNameLowerCase = netName.toLowerCase()
+  for (let netId in constants.NETWORKS) {
+    if (constants.NETWORKS[netId].NAME.toLowerCase() === netNameLowerCase) {
+      return netId
+    }
+  }
+  return null
+}
+
 export async function enableWallet(onAccountChange) {
   if (window.ethereum) {
     try {
@@ -58,35 +68,41 @@ export default async function getWeb3(netId, onAccountChange) {
     web3 = new Web3(window.web3.currentProvider)
     console.log('Injected web3 detected.')
   }
+  let errorMsg = null
+  let netIdName 
+  let netId
 
-  if (!netId) {
-    // Load for the first time in the current browser's session
-    if (web3) {
-      // MetaMask (or another plugin) is injected
-      netId = await getNetId(web3)
-      if (!(netId in constants.NETWORKS)) {
-        // If plugin's netId is unsupported, try to use
-        // the previously chosen netId
-        netId = window.localStorage.netId
-      }
-    } else {
-      // MetaMask (or another plugin) is not injected,
-      // so try to use the previously chosen netId
-      netId = window.localStorage.netId
-    }
+  // Load for the first time in the current browser's session
+  if (web3) {
+    // MetaMask (or another plugin) is injected
+    netId = await getNetId(web3)
     if (!(netId in constants.NETWORKS)) {
-      // If plugin's netId and/or previously chosen netId are not supported,
-      // fallback to default netId
-      netId = defaultNetId
+      netIdName = 'ERROR'
+      errorMsg = messages.WRONG_NETWORK_MSG
+      console.log('This is an unknown network.')
     }
-    window.localStorage.netId = netId
-    window.sessionStorage.netId = netId
+  } else {
+        // Fallback to local if no web3 injection.
+
+        console.log('No web3 instance injected, using Local web3.')
+        console.error('Metamask not found')
+
+        netId = netIdByName(constants.branches.BELLECOUR)
+
+        const network = constants.NETWORKS[netId]
+
+        web3 = new Web3(new Web3.providers.HttpProvider(network.RPC))
+        netIdName = network.NAME
+  }
+  if (!(netId in constants.NETWORKS)) {
+    // If plugin's netId and/or previously chosen netId are not supported,
+    // fallback to default netId
+    netId = defaultNetId
   }
 
   netId = Number(netId)
 
   const network = constants.NETWORKS[netId]
-  let netIdName = network.NAME
   let injectedWeb3 = web3 !== null
   let defaultAccount = null
   let networkMatch = false
