@@ -64,8 +64,7 @@ class AppMainRouter extends Component {
   }
 
   initChain() {
-    const netId = window.sessionStorage.netId
-    getWeb3(netId, this.onAccountChange)
+    getWeb3(this.onAccountChange)
       .then(async web3Config => {
         return networkAddresses(web3Config)
       })
