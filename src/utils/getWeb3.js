@@ -26,7 +26,7 @@ async function getNetId(web3) {
   return netId
 }
 
-export const netIdByName = (netName) => {
+export const netIdByName = netName => {
   const netNameLowerCase = netName.toLowerCase()
   for (let netId in constants.NETWORKS) {
     if (constants.NETWORKS[netId].NAME.toLowerCase() === netNameLowerCase) {
@@ -69,7 +69,7 @@ export default async function getWeb3(netId, onAccountChange) {
     console.log('Injected web3 detected.')
   }
   let errorMsg = null
-  let netIdName 
+  let netIdName
   let netId
 
   // Load for the first time in the current browser's session
@@ -82,17 +82,15 @@ export default async function getWeb3(netId, onAccountChange) {
       console.log('This is an unknown network.')
     }
   } else {
-        // Fallback to local if no web3 injection.
+      // Fallback to local if no web3 injection.
+      console.log('No web3 instance injected, using Local web3.')
+      console.error('Metamask not found')
 
-        console.log('No web3 instance injected, using Local web3.')
-        console.error('Metamask not found')
-
-        netId = netIdByName(constants.branches.BELLECOUR)
-
-        const network = constants.NETWORKS[netId]
-
-        web3 = new Web3(new Web3.providers.HttpProvider(network.RPC))
-        netIdName = network.NAME
+      netId = netIdByName(constants.branches.BELLECOUR)
+      
+      const network = constants.NETWORKS[netId]
+      web3 = new Web3(new Web3.providers.HttpProvider(network.RPC))
+      netIdName = network.NAME
   }
   if (!(netId in constants.NETWORKS)) {
     // If plugin's netId and/or previously chosen netId are not supported,
