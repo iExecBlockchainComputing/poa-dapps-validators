@@ -84,7 +84,7 @@ export default async function getWeb3(netId, onAccountChange) {
   }
 
   netId = Number(netId)
-  console.log("netId =====>",netId)
+  console.log('netId =====>',netId)
   const network = constants.NETWORKS[netId]
   let netIdName = network.NAME
   let injectedWeb3 = web3 !== null
