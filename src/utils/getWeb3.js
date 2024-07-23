@@ -1,5 +1,6 @@
 import Web3 from 'web3'
 import { constants } from './constants'
+import messages from './messages'
 
 const errorMsgNoMetamaskAccount = `You haven't chosen any account in MetaMask.
 Please choose your initial key in MetaMask and reload the page.
@@ -52,7 +53,7 @@ export async function enableWallet(onAccountChange) {
   }
 }
 
-let getWeb3 = (onAccountChanged) => {
+export async function getWeb3(onAccountChanged) {
   return new Promise(function(resolve, reject) {
     // Wait for loading completion to avoid race conditions with web3 injection timing.
     window.addEventListener('load', async function() {
@@ -156,4 +157,3 @@ let getWeb3 = (onAccountChanged) => {
   })
 }
 
-export default getWeb3
