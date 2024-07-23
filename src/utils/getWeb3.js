@@ -53,7 +53,7 @@ export async function enableWallet(onAccountChange) {
   }
 }
 
-export async function getWeb3(onAccountChanged) {
+export default async function getWeb3(onAccountChanged) {
   return new Promise(function(resolve, reject) {
     // Wait for loading completion to avoid race conditions with web3 injection timing.
     window.addEventListener('load', async function() {
