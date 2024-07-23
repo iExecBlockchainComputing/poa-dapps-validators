@@ -156,4 +156,3 @@ export default async function getWeb3(onAccountChanged) {
     })
   })
 }
-
