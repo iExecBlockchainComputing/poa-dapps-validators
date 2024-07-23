@@ -36,6 +36,22 @@ async function getNetId(web3) {
   return netId
 }
 
+export async function enableWallet(onAccountChange) {
+  if (window.ethereum) {
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' })
+    } catch (e) {
+      await onAccountChange(null)
+      throw Error(messages.userDeniedAccessToAccount)
+    }
+
+    const web3 = new Web3(window.ethereum)
+    const accounts = await getAccounts(web3)
+
+    await onAccountChange(accounts[0])
+  }
+}
+
 let getWeb3 = (onAccountChanged) => {
   return new Promise(function(resolve, reject) {
     // Wait for loading completion to avoid race conditions with web3 injection timing.
