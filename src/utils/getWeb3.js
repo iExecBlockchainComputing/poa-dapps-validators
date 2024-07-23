@@ -82,15 +82,15 @@ export default async function getWeb3(netId, onAccountChange) {
       console.log('This is an unknown network.')
     }
   } else {
-      // Fallback to local if no web3 injection.
-      console.log('No web3 instance injected, using Local web3.')
-      console.error('Metamask not found')
+    // Fallback to local if no web3 injection.
+    console.log('No web3 instance injected, using Local web3.')
+    console.error('Metamask not found')
 
-      netId = netIdByName(constants.branches.BELLECOUR)
-      
-      const network = constants.NETWORKS[netId]
-      web3 = new Web3(new Web3.providers.HttpProvider(network.RPC))
-      netIdName = network.NAME
+    netId = netIdByName(constants.branches.BELLECOUR)
+
+    const network = constants.NETWORKS[netId]
+    web3 = new Web3(new Web3.providers.HttpProvider(network.RPC))
+    netIdName = network.NAME
   }
   if (!(netId in constants.NETWORKS)) {
     // If plugin's netId and/or previously chosen netId are not supported,
