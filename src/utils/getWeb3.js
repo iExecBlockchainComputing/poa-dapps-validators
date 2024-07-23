@@ -52,7 +52,7 @@ export async function enableWallet(onAccountChange) {
   }
 }
 
-export default async function getWeb3(netId, onAccountChange) {
+export default async function getWeb3(onAccountChange) {
   let web3 = null
 
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
