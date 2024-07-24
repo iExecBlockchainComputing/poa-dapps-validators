@@ -293,8 +293,6 @@ class AppMainRouter extends Component {
     console.log('this.state.loadingNetworkBranch', this.state.loadingNetworkBranch)
     console.log('this.getValidatorsNetworkBranch()', this.getValidatorsNetworkBranch())
     console.log('networkBranch', networkBranch)
-    
-
     return networkBranch ? (
       <Router history={history}>
         <div
