@@ -64,12 +64,12 @@ class AppMainRouter extends Component {
   }
 
   initChain() {
-    getWeb3(this.onAccountChange)
+    const netId = window.sessionStorage.netId
+    getWeb3(netId, this.onAccountChange)
       .then(async web3Config => {
         return networkAddresses(web3Config)
       })
       .then(async config => {
-        console.log('====>web3Config.netId', web3Config.netId)
         const { web3Config, addresses } = config
         await this.initContracts({
           web3: web3Config.web3Instance,
@@ -279,8 +279,9 @@ class AppMainRouter extends Component {
   }
 
   onNetworkChange(e) {
-    console.log('network has changed', e)
     this.setState({ loading: true, loadingNetworkBranch: getNetworkBranch(e.value), searchTerm: '' })
+    window.localStorage.netId = e.value
+    window.sessionStorage.netId = e.value
     this.initChain()
   }
 
@@ -288,9 +289,6 @@ class AppMainRouter extends Component {
     const networkBranch = this.state.loadingNetworkBranch
       ? this.state.loadingNetworkBranch
       : this.getValidatorsNetworkBranch()
-    console.log('networkBranch', networkBranch)
-    console.log('this.state.loadingNetworkBranch', this.state.loadingNetworkBranch)
-    console.log('this.getValidatorsNetworkBranch()', this.getValidatorsNetworkBranch())
 
     return networkBranch ? (
       <Router history={history}>
