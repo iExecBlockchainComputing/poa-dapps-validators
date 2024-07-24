@@ -80,7 +80,6 @@ export default class Metadata {
   }
 
   getMocData() {
-    // Barinov, Igor		755 Bounty Dr 202	Foster City	CA	94404 	41	2206724	07/23/2021
     return {
       firstName: 'iExecMoc',
       lastName: 'iExecMoc',
