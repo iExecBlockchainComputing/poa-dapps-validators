@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+  poa-dapps-validators:
+    build: ./
+    image: iexechub/poa-dapps-validators:0.2.1
+    container_name: poa-dapps-validators
+    ports:
+      - 8080:80
