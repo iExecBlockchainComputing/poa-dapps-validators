@@ -286,9 +286,14 @@ class AppMainRouter extends Component {
   }
 
   render() {
+    console.log('Rendering ...')
     const networkBranch = this.state.loadingNetworkBranch
       ? this.state.loadingNetworkBranch
       : this.getValidatorsNetworkBranch()
+    console.log('this.state.loadingNetworkBranch', this.state.loadingNetworkBranch)
+    console.log('this.getValidatorsNetworkBranch()', this.getValidatorsNetworkBranch())
+    console.log('networkBranch', networkBranch)
+    
 
     return networkBranch ? (
       <Router history={history}>
