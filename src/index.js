@@ -267,6 +267,8 @@ class AppMainRouter extends Component {
   }
 
   getValidatorsNetworkBranch() {
+    console.log('this.state.netId', this.state.netId)
+    console.log('getNetworkBranch(this.state.netId)', getNetworkBranch(this.state.netId))
     return this.state.netId ? getNetworkBranch(this.state.netId) : null
   }
 
