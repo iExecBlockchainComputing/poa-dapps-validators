@@ -5,6 +5,12 @@ import messages from './messages'
 
 const defaultNetId = helpers.netIdByBranch(constants.branches.CORE)
 
+const errorMsgNoMetamaskAccount = `You haven't chosen any account in MetaMask.
+Please choose your initial key in MetaMask and reload the page.
+Check POA Network <a href='https://github.com/poanetwork/wiki' target='blank'>wiki</a> for more info.`
+
+const errorMsgDeniedAccess = 'You have denied access to your accounts'
+
 async function getAccounts(web3) {
   let accounts
   if (window.ethereum) {
@@ -40,6 +46,14 @@ export async function enableWallet(onAccountChange) {
 
     await onAccountChange(accounts[0])
   }
+}
+
+function generateElement(msg) {
+  let errorNode = document.createElement('div')
+  errorNode.innerHTML = `<div style="line-height: 1.6;">
+    ${msg}
+  </div>`
+  return errorNode
 }
 
 export default async function getWeb3(onAccountChange) {
