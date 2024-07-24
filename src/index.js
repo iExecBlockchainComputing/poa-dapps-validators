@@ -69,6 +69,7 @@ class AppMainRouter extends Component {
         return networkAddresses(web3Config)
       })
       .then(async config => {
+        console.log("====> web3Config.netId", web3Config.netId)
         const { web3Config, addresses } = config
         await this.initContracts({
           web3: web3Config.web3Instance,
