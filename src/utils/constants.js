@@ -1,5 +1,5 @@
 const constants = {}
-constants.organization = 'poanetwork'
+constants.organization = 'iExecBlockchainComputing'
 constants.repoName = 'poa-chain-spec'
 constants.addressesSourceFile = 'contracts.json'
 constants.ABIsSources = {
@@ -13,7 +13,9 @@ constants.rootPath = '/poa-dapps-validators'
 constants.branches = {
   CORE: 'core',
   SOKOL: 'sokol',
-  KOVAN: 'kovan'
+  KOVAN: 'kovan',
+  VIVIANI: 'viviani',
+  BELLECOUR: 'bellecour'
 }
 
 constants.navigationData = [

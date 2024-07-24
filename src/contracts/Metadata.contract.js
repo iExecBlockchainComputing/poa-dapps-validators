@@ -92,7 +92,7 @@ export default class Metadata {
       us_state: '',
       postal_code: '',
       contactEmail: '',
-      isCompany: trueconstants.organization
+      isCompany: true
     }
   }
 
