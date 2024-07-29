@@ -267,8 +267,6 @@ class AppMainRouter extends Component {
   }
 
   getValidatorsNetworkBranch() {
-    console.log('this.state.netId', this.state.netId)
-    // console.log('getNetworkBranch(this.state.netId)', getNetworkBranch(this.state.netId))
     return this.state.netId ? getNetworkBranch(this.state.netId) : null
   }
 
@@ -288,9 +286,6 @@ class AppMainRouter extends Component {
     const networkBranch = this.state.loadingNetworkBranch
       ? this.state.loadingNetworkBranch
       : this.getValidatorsNetworkBranch()
-    console.log('this.state.loadingNetworkBranch', this.state.loadingNetworkBranch)
-    console.log('this.getValidatorsNetworkBranch()', this.getValidatorsNetworkBranch())
-    console.log('networkBranch', networkBranch)
     return networkBranch ? (
       <Router history={history}>
         <div
