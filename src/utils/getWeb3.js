@@ -42,7 +42,7 @@ export async function enableWallet(onAccountChange) {
   }
 }
 
-export default async function getWeb3(netId, onAccountChange) {
+export default async function getWeb3(onAccountChange) {
   let web3 = null
 
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -59,28 +59,14 @@ export default async function getWeb3(netId, onAccountChange) {
     console.log('Injected web3 detected.')
   }
 
-  if (!netId) {
-    // Load for the first time in the current browser's session
-    if (web3) {
-      // MetaMask (or another plugin) is injected
-      netId = await getNetId(web3)
-      if (!(netId in constants.NETWORKS)) {
-        // If plugin's netId is unsupported, try to use
-        // the previously chosen netId
-        netId = window.localStorage.netId
-      }
-    } else {
-      // MetaMask (or another plugin) is not injected,
-      // so try to use the previously chosen netId
-      netId = window.localStorage.netId
-    }
+  let netId = defaultNetId
+  if (web3) {
+    // MetaMask (or another plugin) is injected
+    netId = await getNetId(web3)
     if (!(netId in constants.NETWORKS)) {
-      // If plugin's netId and/or previously chosen netId are not supported,
-      // fallback to default netId
+      // If plugin's netId is unsupported, fallback to default netId
       netId = defaultNetId
     }
-    window.localStorage.netId = netId
-    window.sessionStorage.netId = netId
   }
 
   netId = Number(netId)
