@@ -64,8 +64,7 @@ class AppMainRouter extends Component {
   }
 
   initChain() {
-    const netId = window.sessionStorage.netId
-    getWeb3(netId, this.onAccountChange)
+    getWeb3(this.onAccountChange)
       .then(async web3Config => {
         return networkAddresses(web3Config)
       })
@@ -287,7 +286,6 @@ class AppMainRouter extends Component {
     const networkBranch = this.state.loadingNetworkBranch
       ? this.state.loadingNetworkBranch
       : this.getValidatorsNetworkBranch()
-
     return networkBranch ? (
       <Router history={history}>
         <div
