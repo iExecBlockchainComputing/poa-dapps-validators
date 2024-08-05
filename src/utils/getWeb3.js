@@ -3,7 +3,7 @@ import helpers from './helpers'
 import { constants } from './constants'
 import messages from './messages'
 
-const defaultNetId = helpers.netIdByBranch(constants.branches.CORE)
+const defaultNetId = helpers.netIdByBranch(constants.branches.BELLECOUR)
 
 async function getAccounts(web3) {
   let accounts
